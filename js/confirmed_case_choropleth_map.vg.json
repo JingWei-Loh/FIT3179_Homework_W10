@@ -6,6 +6,7 @@
     },
     "width": 800,
     "height": 400,
+    
     "data": {
       "url": "https://raw.githubusercontent.com/JingWei-Loh/FIT3179_Homework_W9/main/js/WorldMapWithGraticules.topojson",
       "format": {"type": "topojson", "feature": "ne_110m_admin_0_countries"}

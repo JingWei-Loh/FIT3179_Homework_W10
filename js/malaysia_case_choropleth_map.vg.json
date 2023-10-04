@@ -1,13 +1,16 @@
 {
     "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-    "title": "COVID-19 Active Cases (10 Oct 2020)",
-    "width": 800,
-    "height": 400,
+    "title": {
+      "text": "COVID-19 Active Cases in Malaysia",
+      "fontSize": 20
+    },
     "projection": {"type": "equalEarth"},
     "data": {
       "url": "https://raw.githubusercontent.com/jnewbery/CartogramMalaysia/master/public/data/malaysia-states.topojson",
       "format": {"type": "topojson", "feature": "states"}
     },
+    "height": 400,
+    "width": 600,
     "transform": [
       {
         "lookup": "properties.Name",
@@ -29,8 +32,8 @@
         "scale": {"type": "log"}
       },
       "tooltip": [
-        {"field": "properties.Name", "type": "nominal", "title": "Country"},
-        {"field": "Active Cases", "type": "quantitative"}
+        {"field": "properties.Name", "type": "nominal", "title": "State"},
+        {"field": "Active Cases", "type": "quantitative", "title": "Cases per 10,000 population"}
       ]
     }
   }
