@@ -1,78 +1,107 @@
 {
-    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-    "title": {
-        "text": "Covid-19 Stay-at-Home Policy for Year 2020, 2021 and 2022",
-        "fontSize": 20
-      },
-    "data": {
-      "url": "https://raw.githubusercontent.com/JingWei-Loh/FIT3179_Homework_W10/main/data/stay-at-home.csv"
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Covid-19 Stay-at-Home Policy for Year 2020, 2021 and 2022",
+    "fontSize": 20
+  },
+  "data": {
+    "url": "https://raw.githubusercontent.com/JingWei-Loh/FIT3179_Homework_W10/main/data/stay-at-home.csv"
+  },
+  "height": 400,
+  "width": 600,
+  "encoding": {
+    "x": {
+      "timeUnit": "year",
+      "field": "date",
+      "type": "ordinal",
+      "title": "Year"
     },
-    "height": 400,
-    "width": 600,
-  
-    "encoding": {
-      "x": {
-        "timeUnit": "year",
-        "field": "date",
-        "type": "ordinal",
-        "title": "Year"
-      },
-      "y": {
-        "aggregate": "count",
-        "type": "quantitative",
-        "stack":  "normalize",
-        "title": "Count of Countries with different Stay-at-Home policy"
-      }
-    },
-  
-    "layer": [
-      {
-        "params": [
+    "y": {
+      "aggregate": "count",
+      "type": "quantitative",
+      "stack": "normalize",
+      "title": "Count of Countries with different Stay-at-Home policy"
+    }
+  },
+  "layer": [
+    {
+      "params": [
+        {
+          "name": "policy_highlight",
+          "select": {"type": "point", "fields": ["policy"]},
+          "bind": "legend"
+        }
+      ],
+      "mark": "bar",
+      "encoding": {
+        "color": {
+          "field": "policy",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "No measures",
+              "Recommended",
+              "Required (except essentials)",
+              "Required (few exceptions)"
+            ],
+            "range": ["#e7ba52", "#c7c7c7", "#aec7e8", "#1f77b4"]
+          },
+          "title": "Stay at home policy"
+        },
+        "opacity": {
+          "condition": {"param": "policy_highlight", "value": 1},
+          "value": 0.3
+        },
+        "tooltip": [
+          {"field": "policy", "title": "Policy", "type": "nominal"},
           {
-            "name": "policy_highlight",
-            "select": {"type": "point", "fields": ["policy"]},
-            "bind": "legend"
-          }
-        ],
-        "mark": "bar",
-          "encoding": {
-            "color": {
-              "field": "policy",
-              "type": "nominal",
-              "scale": {
-                "domain": ["No measures", "Recommended", "Required (except essentials)", "Required (few exceptions)"],
-                "range": ["#e7ba52", "#c7c7c7", "#aec7e8", "#1f77b4"]
-              },
-              "title": "Stay at home policy"
-            },
-            "opacity": {
-              "condition": {"param": "policy_highlight", "value": 1},
-              "value": 0.3
-            },
-            "tooltip": [
-            {"field": "policy", "title": "Policy", "type": "nominal"},
-            {"aggregate": "count", "field": "policy", "title": "Count of Countries", "type": "quantitative", "format": ","}
-          ]
-          }
-      },
-      {
-        "mark": {"type": "text", "opacity": 0.9, "color": "white"},
-        "encoding": {
-          "y": {
             "aggregate": "count",
             "field": "policy",
+            "title": "Count of Countries",
             "type": "quantitative",
-            "stack":  "normalize",
-            "bandPosition": 0.5
-          },
-          "text": {
-            "aggregate": "count", 
-            "field": "policy"
-          },
-          "detail": {
-            "field": "policy"
+            "format": ","
           }
-        }
+        ]
       }
-    ]
-  }
+    },
+    {
+      "mark": {"type": "text", "opacity": 0.9, "color": "white"},
+      "encoding": {
+        "y": {
+          "aggregate": "count",
+          "field": "policy",
+          "type": "quantitative",
+          "stack": "normalize",
+          "bandPosition": 0.5
+        },
+        "text": {"aggregate": "count", "field": "policy"},
+        "detail": {"field": "policy"}
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": {
+            "timeUnit": "year",
+            "field": "date", 
+            "range": [2022,2023]
+          }
+        },
+        {
+            "calculate": "'Year 2022 ;has least countries; with stay-at-home; policy'",
+            "as": "annotation_ori"
+        },
+        {
+            "calculate": "split(datum.annotation_ori,';')",
+            "as": "annotation"
+        }
+      ],
+      "encoding": {
+        "text": {"field": "annotation"},
+        "color": {"value": "black"},
+        "size": {"value": 12}
+      },
+      "mark": {"type": "text", "dx": 3, "dy": 40}
+    }
+  ]
+}
